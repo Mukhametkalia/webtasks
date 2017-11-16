@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <style>
+      #cards .card{
+        border:1px solid red;
+        display:flex;
+        width:300px;
+      }
+      #cards .card .title{
+        flex-grow: 1;
+      }
+      #cards .card .price{
+        font-weight: bold;
+        padding-right: 20px;
+      }
+      #loading{
+        display: none;
+      }
+      #cards{
+        width:300px;
+        height:200px;
+        border: 1px solid blue;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <button id="lod">Load</button>
+    <div>
+      <button id="sortByMaker">Sort by maker</button>
+      <button id="sortByPrice">Sort by price</button>
+    </div>
+    <div id="cards">
+      <img width="300px" height="200px" id="loading" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
+    </div>
+
+
+    <script defer>
+      var x;
+      document.querySelector("#lod").addEventListener("click",call);
+         function call(event){
+          document.querySelector("#loading").style.display="block";
+          document.querySelector("#lod").innerHTML="Loading...";
+          fetch("http://demo4296963.mockable.io/listCars").then(onSuccess,onFail).then(ReadText);
+        }
+        function onSuccess(response){
+          return response.text();
+        }
+        function onFail(response){
+          document.querySelector("#lod").innerHTML="Some error occured";
+
+        }
+        function ReadText(text) {
+           document.querySelector("#lod").innerHTML="Items are loaded";
+           x=JSON.parse(text);
+           var t;
+            document.querySelector("#loading").style.display="none";
+           for(var i=0;i<x.length;i++){
+              var t=x[i];
+              var div = document.createElement('div');
+              div.classList.add("card");
+
+              var span=document.createElement('span');
+              span.classList.add("title");
+
+              span.textContent=t.maker+" "+t.model;
+
+              div.appendChild(span);
+
+              var span1=document.createElement('span');
+              span1.classList.add("price");
+              span1.textContent=t.price;
+
+              div.appendChild(span1);
+
+
+
+
+
+              document.querySelector("#cards").appendChild(div);
+
+           }
+          
+        }
+        document.querySelector("#sortByPrice").addEventListener("click",ReadText1);
+         function ReadText1(text) {
+           document.querySelector("#lod").innerHTML="Items are loaded";
+           document.querySelector("#cards").innerHTML="";
+           x.sort((a,b) =>b.price-a.price);
+           var t;
+           for(var i=0;i<x.length;i++){
+              var t=x[i];
+              var div = document.createElement('div');
+              div.classList.add("card");
+
+              var span=document.createElement('span');
+              span.classList.add("title");
+
+              span.textContent=t.maker+" "+t.model;
+
+              div.appendChild(span);
+
+              var span1=document.createElement('span');
+              span1.classList.add("price");
+              span1.textContent=t.price+10000;
+
+              div.appendChild(span1);
+
+
+
+
+
+              document.querySelector("#cards").appendChild(div);
+
+           }
+          
+        }
+        document.querySelector("#sortByMaker").addEventListener("click",ReadText2);
+         function ReadText2(text) {
+           document.querySelector("#lod").innerHTML="Items are loaded";
+           document.querySelector("#cards").innerHTML="";
+           x.sort((a,b) => a.maker.localeCompare(b.maker));
+           var t;
+           for(var i=0;i<x.length;i++){
+              var t=x[i];
+              var div = document.createElement('div');
+              div.classList.add("card");
+
+              var span=document.createElement('span');
+              span.classList.add("title");
+
+              span.textContent=t.maker+" "+t.model;
+
+              div.appendChild(span);
+
+              var span1=document.createElement('span');
+              span1.classList.add("price");
+              span1.textContent=t.price;
+
+              div.appendChild(span1);
+
+
+
+
+
+              document.querySelector("#cards").appendChild(div);
+
+           }
+          
+        }
+
+
+
+
+    </script>
+  </body>
+
+</html>
